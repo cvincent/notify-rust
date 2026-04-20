@@ -6,13 +6,13 @@ fn main() {
     println!("this is a xdg only feature");
 }
 
-#[cfg(all(unix, not(target_os = "macos")))]
+#[cfg(any(all(unix, not(target_os = "macos")), target_os = "windows"))]
 fn main() {
     Notification::new()
         .summary("click me")
         .body("This will disappear by itself")
         .action("clicked_a", "button a") // IDENTIFIER, LABEL
-        .hint(Hint::Transient(true)) // needed to work on kde
+        // .hint(Hint::Transient(true)) // needed to work on kde
         .show()
         .unwrap()
         .wait_for_action(|action| match action {
@@ -28,7 +28,7 @@ fn main() {
         .action("default", "default") // IDENTIFIER, LABEL
         .action("clicked_a", "button a") // IDENTIFIER, LABEL
         .action("clicked_b", "button b") // IDENTIFIER, LABEL
-        .hint(Hint::Resident(true)) // does not work on kde
+        // .hint(Hint::Resident(true)) // does not work on kde
         .timeout(Timeout::Never) // works on kde and gnome
         .show()
         .unwrap()
