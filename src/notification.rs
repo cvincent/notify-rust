@@ -5,7 +5,7 @@ use crate::{
     xdg,
 };
 
-#[cfg(all(unix, not(target_os = "macos"), feature = "images"))]
+#[cfg(all(unix, not(target_os = "macos"), feature = "images_no_default_features"))]
 use crate::image::Image;
 
 #[cfg(all(unix, target_os = "macos"))]
@@ -151,7 +151,7 @@ impl Notification {
     }
 
     /// Manual wrapper for `Hint::ImageData`
-    #[cfg(all(feature = "images", unix, not(target_os = "macos")))]
+    #[cfg(all(feature = "images_no_default_features", unix, not(target_os = "macos")))]
     pub fn image_data(&mut self, image: Image) -> &mut Notification {
         self.hint(Hint::ImageData(image));
         self
@@ -187,7 +187,7 @@ impl Notification {
     }
 
     /// Wrapper for `Hint::ImageData`
-    #[cfg(all(feature = "images", unix, not(target_os = "macos")))]
+    #[cfg(all(feature = "images_no_default_features", unix, not(target_os = "macos")))]
     pub fn image<T: AsRef<std::path::Path> + Sized>(
         &mut self,
         path: T,
@@ -461,7 +461,7 @@ impl Notification {
     ///
     /// Returns a handle to a notification
     #[cfg(all(unix, not(target_os = "macos")))]
-    #[cfg(all(feature = "async", feature = "zbus"))]
+    #[cfg(feature = "zbus")]
     pub async fn show_async(&self) -> Result<xdg::NotificationHandle> {
         xdg::show_notification_async(self).await
     }
@@ -470,7 +470,7 @@ impl Notification {
     ///
     /// Returns a handle to a notification
     #[cfg(all(unix, not(target_os = "macos")))]
-    #[cfg(feature = "async")]
+    #[cfg(feature = "zbus")]
     // #[cfg(test)]
     pub async fn show_async_at_bus(&self, sub_bus: &str) -> Result<xdg::NotificationHandle> {
         let bus = xdg::NotificationBus::custom(sub_bus).ok_or("invalid subpath")?;

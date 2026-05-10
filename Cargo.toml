@@ -1,6 +1,6 @@
 [package]
 name = "notify-rust"
-version = "4.14.0"
+version = "4.16.1"
 authors = ["Hendrik Sollich <hendrik@hoodie.de>"]
 description = "Show desktop notifications (linux, bsd, mac). Pure Rust dbus client and server."
 repository = "https://github.com/hoodie/notify-rust"
@@ -23,9 +23,9 @@ include = [
 [target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
 dbus = { version = "0.9", optional = true }
 lazy_static = { version = "1.5", optional = true }
-image = { version = "0.25", optional = true }
+image = { version = "0.25", optional = true, default-features = false }
 zbus = { version = "5", optional = true, default-features = false }
-serde = { version = "1", optional = true }
+serde = { version = "1", features = ["derive"], optional = true }
 log = "0.4"
 env_logger = { version = "0.11", optional = true }
 futures-lite = { version = "2.6.1" }
@@ -47,11 +47,12 @@ z-with-tokio = ["zbus", "serde", "tokio"]
 async = ["zbus/async-io"]
 tokio = ["zbus/tokio"]
 debug_namespace = []
-images = ["image", "lazy_static"]
+images = ["images_no_default_features", "image/rayon", "image/default-formats"]
+images_no_default_features = ["image", "lazy_static"]
 
 [dev-dependencies]
 color-backtrace = "0.7" # wait for MSVR 1.70 to update
-ctor = "0.8"
+ctor = "0.12"
 maplit = "1.0"
 
 [dev-dependencies.async-std]

@@ -81,7 +81,7 @@ impl ZbusNotificationHandle {
         wait_for_action_signal(&self.connection, self.id, invocation_closure).await;
     }
 
-    pub async fn close_fallible(self) -> Result<()> {
+    pub async fn close_fallible(&self) -> Result<()> {
         self.connection
             .call_method(
                 Some(self.notification.bus.clone().into_name()),
@@ -94,7 +94,7 @@ impl ZbusNotificationHandle {
         Ok(())
     }
 
-    pub async fn close(self) {
+    pub async fn close(&self) {
         let _ = self.close_fallible().await;
     }
 
@@ -118,8 +118,8 @@ impl ZbusNotificationHandle {
         Ok(())
     }
 
-    pub fn update(&mut self) {
-        self.update_fallible().unwrap();
+    pub fn update(&mut self) -> Result<()> {
+        self.update_fallible()
     }
 }
 
